@@ -18,18 +18,12 @@
       "dest": "/server/index.js"
     },
     {
-      "src": "/static/(.*)",
-      "dest": "/client/build/static/$1"
-    },
-    {
-      "src": "/favicon.ico",
-      "dest": "/client/build/favicon.ico"
+      "src": "/(.*\\.(js|css|png|jpg|jpeg|gif|ico|svg))",
+      "dest": "/client/build/$1"
     },
     {
       "src": "/(.*)",
       "dest": "/client/build/index.html"
     }
-  ],
-  "installCommand": "npm install && cd client && npm install",
-  "buildCommand": "cd client && npm run build"
+  ]
 }
