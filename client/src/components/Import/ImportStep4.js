@@ -82,7 +82,7 @@ function ImportStep4({ onBack, data, onReset }) {
       apiKey
     };
 
-    const eventSource = createDeploymentStream(
+    createDeploymentStream(
       deploymentData,
       (progressData) => {
         setDeploymentProgress(progressData);
@@ -99,13 +99,6 @@ function ImportStep4({ onBack, data, onReset }) {
         }
       }
     );
-
-    // Clean up on component unmount
-    return () => {
-      if (eventSource) {
-        eventSource.close();
-      }
-    };
   };
 
   const configuration = data.configuration;

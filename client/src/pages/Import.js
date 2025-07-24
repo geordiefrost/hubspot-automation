@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { CloudArrowUpIcon, DocumentTextIcon, TableCellsIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
-import { useApp } from '../context/AppContext';
 import PageHeader from '../components/Common/PageHeader';
 import ImportStep1 from '../components/Import/ImportStep1';
 import ImportStep2 from '../components/Import/ImportStep2';

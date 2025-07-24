@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import { useMutation } from 'react-query';
 import { 
   ExclamationTriangleIcon, 
@@ -190,7 +190,7 @@ function ImportStep3({ onComplete, onBack, data }) {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {mappings.map((mapping, index) => (
-                <React.Fragment key={index}>
+                <Fragment key={index}>
                   <tr className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
                     <td className="px-4 py-3">
                       <button
@@ -317,7 +317,7 @@ function ImportStep3({ onComplete, onBack, data }) {
                       </td>
                     </tr>
                   )}
-                </React.Fragment>
+                </Fragment>
               ))}
             </tbody>
           </table>

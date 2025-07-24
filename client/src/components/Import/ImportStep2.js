@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useMutation } from 'react-query';
 import { ChartBarIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { importAPI } from '../../services/api';
@@ -22,7 +22,7 @@ function ImportStep2({ onComplete, onBack, data }) {
     },
   });
 
-  const handleAnalyze = React.useCallback(() => {
+  const handleAnalyze = useCallback(() => {
     analysisMutation.mutate({
       headers: data.headers,
       sampleData: data.sampleData,
@@ -30,7 +30,7 @@ function ImportStep2({ onComplete, onBack, data }) {
     });
   }, [analysisMutation, data.headers, data.sampleData, data.objectType]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     // Auto-analyze when component mounts
     if (data.headers.length > 0 && !analysisMutation.isLoading) {
       handleAnalyze();
