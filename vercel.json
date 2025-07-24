@@ -1,25 +1,20 @@
 {
   "version": 2,
-  "builds": [
+  "buildCommand": "cd client && npm install && npm run build",
+  "outputDirectory": "client/build",
+  "functions": {
+    "server/index.js": {
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [
     {
-      "src": "client/build/**",
-      "use": "@vercel/static"
+      "source": "/api/(.*)",
+      "destination": "/server/index.js"
     },
     {
-      "src": "server/index.js",
-      "use": "@vercel/node"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/server/index.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/client/build/index.html"
-    }
-  ],
-  "installCommand": "npm install && cd client && npm install && npm run build",
-  "buildCommand": "echo 'Build completed'"
+  ]
 }
