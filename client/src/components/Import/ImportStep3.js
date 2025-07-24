@@ -24,7 +24,6 @@ const HUBSPOT_TYPES = [
 function ImportStep3({ onComplete, onBack, data }) {
   const { setError } = useApp();
   const [mappings, setMappings] = useState(data.mappings || []);
-  const [editingMapping, setEditingMapping] = useState(null);
   const [expandedRows, setExpandedRows] = useState(new Set());
 
   // Validation mutation
@@ -241,7 +240,7 @@ function ImportStep3({ onComplete, onBack, data }) {
                     </td>
                     <td className="px-4 py-3 text-sm text-gray-900">
                       <button
-                        onClick={() => setEditingMapping(index)}
+                        onClick={() => toggleRowExpansion(index)}
                         className="text-primary-600 hover:text-primary-500 mr-3"
                       >
                         <PencilIcon className="h-4 w-4" />

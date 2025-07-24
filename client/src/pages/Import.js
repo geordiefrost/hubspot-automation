@@ -15,7 +15,6 @@ const STEPS = [
 ];
 
 function Import() {
-  const { } = useApp();
   const [currentStep, setCurrentStep] = useState(1);
   const [importData, setImportData] = useState({
     headers: [],

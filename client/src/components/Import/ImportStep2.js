@@ -22,13 +22,13 @@ function ImportStep2({ onComplete, onBack, data }) {
     },
   });
 
-  const handleAnalyze = () => {
+  const handleAnalyze = React.useCallback(() => {
     analysisMutation.mutate({
       headers: data.headers,
       sampleData: data.sampleData,
       objectType: data.objectType
     });
-  };
+  }, [analysisMutation, data.headers, data.sampleData, data.objectType]);
 
   React.useEffect(() => {
     // Auto-analyze when component mounts
