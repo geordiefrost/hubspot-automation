@@ -35,7 +35,7 @@ function ImportStep2({ onComplete, onBack, data }) {
     if (data.headers.length > 0 && !analysisMutation.isLoading) {
       handleAnalyze();
     }
-  }, []);
+  }, [data.headers.length, analysisMutation.isLoading, handleAnalyze]);
 
   const isLoading = analysisMutation.isLoading;
 

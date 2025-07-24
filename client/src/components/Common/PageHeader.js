@@ -9,7 +9,7 @@ function PageHeader({ title, subtitle, children, breadcrumbs = [] }) {
             {/* Breadcrumbs */}
             {breadcrumbs.length > 0 && (
               <nav className="flex mb-2" aria-label="Breadcrumb">
-                <ol role="list" className="flex items-center space-x-2">
+                <ol className="flex items-center space-x-2">
                   {breadcrumbs.map((crumb, index) => (
                     <li key={index} className="flex items-center">
                       {index > 0 && (

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation } from 'react-query';
 import { 
-  CheckCircleIcon, 
   ExclamationTriangleIcon, 
   PencilIcon,
   EyeIcon,
@@ -23,9 +22,8 @@ const HUBSPOT_TYPES = [
 ];
 
 function ImportStep3({ onComplete, onBack, data }) {
-  const { setError, showSuccess } = useApp();
+  const { setError } = useApp();
   const [mappings, setMappings] = useState(data.mappings || []);
-  const [editingMapping, setEditingMapping] = useState(null);
   const [expandedRows, setExpandedRows] = useState(new Set());
 
   // Validation mutation

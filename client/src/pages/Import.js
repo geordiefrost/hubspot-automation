@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
-import { useQuery, useMutation } from 'react-query';
 import { CloudArrowUpIcon, DocumentTextIcon, TableCellsIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
-import { importAPI, templateAPI } from '../services/api';
 import { useApp } from '../context/AppContext';
 import PageHeader from '../components/Common/PageHeader';
-import LoadingSpinner from '../components/Common/LoadingSpinner';
 import ImportStep1 from '../components/Import/ImportStep1';
 import ImportStep2 from '../components/Import/ImportStep2';
 import ImportStep3 from '../components/Import/ImportStep3';
@@ -18,7 +15,7 @@ const STEPS = [
 ];
 
 function Import() {
-  const { apiKey, showSuccess, setError } = useApp();
+  const { } = useApp();
   const [currentStep, setCurrentStep] = useState(1);
   const [importData, setImportData] = useState({
     headers: [],
@@ -74,7 +71,7 @@ function Import() {
         {/* Progress Steps */}
         <div className="mb-8">
           <nav aria-label="Progress">
-            <ol role="list" className="flex items-center">
+            <ol className="flex items-center">
               {STEPS.map((step, stepIdx) => (
                 <li
                   key={step.name}

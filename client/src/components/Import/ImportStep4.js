@@ -5,10 +5,9 @@ import {
   CheckCircleIcon, 
   RocketLaunchIcon,
   DocumentDuplicateIcon,
-  ClockIcon,
-  ChartBarIcon
+  ClockIcon
 } from '@heroicons/react/24/outline';
-import { templateAPI, deploymentAPI } from '../../services/api';
+import { templateAPI } from '../../services/api';
 import { useApp } from '../../context/AppContext';
 import LoadingSpinner from '../Common/LoadingSpinner';
 import { createDeploymentStream } from '../../services/api';
