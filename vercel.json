@@ -2,13 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "server/index.js",
-      "use": "@vercel/node"
-    },
-    {
       "src": "client/package.json",
       "use": "@vercel/static-build",
       "config": { "distDir": "build" }
+    },
+    {
+      "src": "server/index.js",
+      "use": "@vercel/node",
+      "config": { "maxDuration": 30 }
     }
   ],
   "routes": [
@@ -21,12 +22,6 @@
       "dest": "/client/build/$1"
     }
   ],
-  "env": {
-    "NODE_ENV": "production"
-  },
-  "functions": {
-    "server/index.js": {
-      "maxDuration": 30
-    }
-  }
+  "installCommand": "npm install && cd client && npm install",
+  "buildCommand": "cd client && npm run build"
 }
