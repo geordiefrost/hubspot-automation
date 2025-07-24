@@ -1,5 +1,5 @@
 // Vercel API handler that proxies to our Express server
-const app = require('../server/index.js');
+let app;
 
 module.exports = async (req, res) => {
   try {
@@ -13,15 +13,29 @@ module.exports = async (req, res) => {
       return;
     }
     
+    // Lazy load the Express app to avoid initialization issues
+    if (!app) {
+      console.log('Initializing Express app...');
+      console.log('DATABASE_URL exists:', !!process.env.DATABASE_URL);
+      console.log('NODE_ENV:', process.env.NODE_ENV);
+      
+      // Ensure NODE_ENV is set for Sequelize config
+      process.env.NODE_ENV = process.env.NODE_ENV || 'production';
+      
+      app = require('../server/index.js');
+    }
+    
     // Proxy all API requests to our Express server
     app(req, res);
   } catch (error) {
     console.error('API Error:', error);
+    console.error('Stack:', error.stack);
     res.status(500).json({ 
       error: {
         code: '500',
         message: 'A server error has occurred',
-        details: error.message
+        details: error.message,
+        stack: process.env.NODE_ENV === 'production' ? undefined : error.stack
       }
     });
   }
