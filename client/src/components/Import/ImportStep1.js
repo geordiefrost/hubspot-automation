@@ -10,6 +10,7 @@ import {
 import { importAPI } from '../../services/api';
 import { useApp } from '../../context/AppContext';
 import LoadingSpinner from '../Common/LoadingSpinner';
+import HelpCard from '../Common/HelpCard';
 
 const OBJECT_TYPES = [
   { value: 'contact', label: 'Contacts', description: 'People in your CRM' },
@@ -121,6 +122,33 @@ function ImportStep1({ onComplete, data }) {
         <p className="text-sm text-gray-600">
           Upload a CSV file or paste data from Excel to get started. We'll analyze your data and suggest the best HubSpot property mappings.
         </p>
+      </div>
+
+      {/* Step 1 Help Card */}
+      <div className="mb-6">
+        <HelpCard type="info" title="Step 1: Choose Your Data">
+          <div className="space-y-3">
+            <p>Select what type of HubSpot records you're importing, then choose how to provide your data:</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+              <div>
+                <strong>CSV Upload:</strong>
+                <ul className="mt-1 space-y-1 text-xs">
+                  <li>• Best for large datasets (1000+ records)</li>
+                  <li>• Supports .csv, .xls, .xlsx files</li>
+                  <li>• Handles special characters properly</li>
+                </ul>
+              </div>
+              <div>
+                <strong>Excel Paste:</strong>
+                <ul className="mt-1 space-y-1 text-xs">
+                  <li>• Quick for small datasets (&lt;500 records)</li>
+                  <li>• Copy directly from Excel/Google Sheets</li>
+                  <li>• Perfect for testing with sample data</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </HelpCard>
       </div>
 
       {/* Object Type Selection */}

@@ -4,6 +4,7 @@ import { ChartBarIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outli
 import { importAPI } from '../../services/api';
 import { useApp } from '../../context/AppContext';
 import LoadingSpinner from '../Common/LoadingSpinner';
+import HelpCard from '../Common/HelpCard';
 
 function ImportStep2({ onComplete, onBack, data }) {
   const { setError } = useApp();
@@ -48,6 +49,24 @@ function ImportStep2({ onComplete, onBack, data }) {
         <p className="text-sm text-gray-600">
           We're analyzing your {data.totalRows} rows of {data.objectType} data to suggest the best HubSpot property mappings.
         </p>
+      </div>
+
+      {/* Step 2 Help Card */}
+      <div className="mb-6">
+        <HelpCard type="info" title="Step 2: AI Field Analysis">
+          <div className="space-y-2">
+            <p>Our AI analyzes your data to automatically suggest HubSpot property mappings:</p>
+            <ul className="text-sm space-y-1">
+              <li>• <strong>Field Name Recognition:</strong> Matches column headers to HubSpot properties</li>
+              <li>• <strong>Data Type Detection:</strong> Identifies emails, phones, dates, and custom fields</li>
+              <li>• <strong>Pattern Analysis:</strong> Examines sample data to improve accuracy</li>
+              <li>• <strong>Smart Suggestions:</strong> Recommends new custom properties when needed</li>
+            </ul>
+            <p className="text-sm font-medium text-blue-700 mt-2">
+              This process takes 10-30 seconds depending on your data size.
+            </p>
+          </div>
+        </HelpCard>
       </div>
 
       {/* Data Overview */}

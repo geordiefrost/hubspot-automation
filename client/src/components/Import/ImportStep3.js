@@ -10,6 +10,7 @@ import {
 import { importAPI } from '../../services/api';
 import { useApp } from '../../context/AppContext';
 import LoadingSpinner from '../Common/LoadingSpinner';
+import HelpCard from '../Common/HelpCard';
 
 const HUBSPOT_TYPES = [
   { value: 'string', label: 'Text', fieldTypes: ['text', 'textarea'] },
@@ -125,6 +126,37 @@ function ImportStep3({ onComplete, onBack, data }) {
         <p className="text-sm text-gray-600">
           Review and adjust the suggested property mappings. Fields with high confidence are ready to use, while others may need your review.
         </p>
+      </div>
+
+      {/* Step 3 Help Card */}
+      <div className="mb-6">
+        <HelpCard type="tip" title="Step 3: Review & Adjust Mappings">
+          <div className="space-y-2">
+            <p>Review the AI-suggested property mappings and make adjustments as needed:</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+              <div>
+                <strong>Confidence Levels:</strong>
+                <ul className="mt-1 space-y-1 text-xs">
+                  <li>• <strong className="text-green-600">High (80%+):</strong> Ready to use</li>
+                  <li>• <strong className="text-yellow-600">Medium (50-80%):</strong> Review recommended</li>
+                  <li>• <strong className="text-red-600">Low (&lt;50%):</strong> Needs attention</li>
+                </ul>
+              </div>
+              <div>
+                <strong>What You Can Adjust:</strong>
+                <ul className="mt-1 space-y-1 text-xs">
+                  <li>• Property names and labels</li>
+                  <li>• Data types (text, number, date, etc.)</li>
+                  <li>• Dropdown options for select fields</li>
+                  <li>• Property groupings</li>
+                </ul>
+              </div>
+            </div>
+            <p className="text-sm font-medium text-yellow-700 mt-2">
+              Click the expand arrows to see sample data and edit property details!
+            </p>
+          </div>
+        </HelpCard>
       </div>
 
       {/* Summary Stats */}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import {
@@ -9,14 +9,18 @@ import {
   CheckCircleIcon,
   ExclamationTriangleIcon,
   ClockIcon,
+  InformationCircleIcon,
 } from '@heroicons/react/24/outline';
 import { deploymentAPI, templateAPI } from '../services/api';
 import { useApp } from '../context/AppContext';
 import PageHeader from '../components/Common/PageHeader';
 import LoadingSpinner from '../components/Common/LoadingSpinner';
+import HelpCard from '../components/Common/HelpCard';
+import GettingStarted from '../components/Common/GettingStarted';
 
 function Dashboard() {
   const { apiKey } = useApp();
+  const [showGettingStarted, setShowGettingStarted] = useState(!apiKey);
 
   // Fetch deployment stats
   const { data: deploymentStats, isLoading: statsLoading } = useQuery(
@@ -75,13 +79,67 @@ function Dashboard() {
       />
 
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        {/* Getting Started Guide */}
+        {showGettingStarted && (
+          <GettingStarted onClose={() => setShowGettingStarted(false)} />
+        )}
+
         {!apiKey ? (
-          <ApiKeyPrompt />
+          <>
+            <ApiKeyPrompt />
+            <div className="mt-6">
+              <HelpCard type="info" title="What is HubSpot Setup Automation?">
+                <p className="mb-3">
+                  This platform helps you quickly set up HubSpot accounts for clients by:
+                </p>
+                <ul className="space-y-1 text-sm">
+                  <li>• <strong>Importing data from CSV files</strong> - Upload contact lists, company data, etc.</li>
+                  <li>• <strong>Creating custom properties</strong> - Automatically map your fields to HubSpot</li>
+                  <li>• <strong>Setting up pipelines</strong> - Configure sales processes for different industries</li>
+                  <li>• <strong>Using templates</strong> - Pre-built configurations for common business types</li>
+                </ul>
+                <p className="mt-3 text-sm font-medium">
+                  Get started by connecting your HubSpot API key above!
+                </p>
+              </HelpCard>
+            </div>
+          </>
         ) : (
           <>
+            {/* Welcome back message */}
+            <div className="mb-6">
+              <HelpCard type="tip" title="Quick Actions">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+                  <Link to="/import" className="text-sm bg-white border border-gray-200 rounded-lg p-3 hover:bg-gray-50 block">
+                    <CloudArrowUpIcon className="h-5 w-5 mb-2 text-blue-600" />
+                    <div className="font-medium">Import Data</div>
+                    <div className="text-gray-600 text-xs">Upload CSV and create properties</div>
+                  </Link>
+                  <Link to="/templates" className="text-sm bg-white border border-gray-200 rounded-lg p-3 hover:bg-gray-50 block">
+                    <DocumentDuplicateIcon className="h-5 w-5 mb-2 text-green-600" />
+                    <div className="font-medium">Browse Templates</div>
+                    <div className="text-gray-600 text-xs">Pre-built industry setups</div>
+                  </Link>
+                  <Link to="/deployments" className="text-sm bg-white border border-gray-200 rounded-lg p-3 hover:bg-gray-50 block">
+                    <ArrowPathIcon className="h-5 w-5 mb-2 text-purple-600" />
+                    <div className="font-medium">View Deployments</div>
+                    <div className="text-gray-600 text-xs">Monitor active setups</div>
+                  </Link>
+                </div>
+              </HelpCard>
+            </div>
+
             {/* Stats Overview */}
             <div className="mb-8">
-              <h2 className="text-lg font-medium text-gray-900 mb-4">Overview</h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-medium text-gray-900">Overview</h2>
+                <button 
+                  onClick={() => setShowGettingStarted(true)}
+                  className="text-sm text-primary-600 hover:text-primary-700"
+                >
+                  Show Getting Started Guide
+                </button>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <StatCard
                   title="Total Deployments"

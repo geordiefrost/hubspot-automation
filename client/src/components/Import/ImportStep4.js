@@ -10,6 +10,7 @@ import {
 import { templateAPI } from '../../services/api';
 import { useApp } from '../../context/AppContext';
 import LoadingSpinner from '../Common/LoadingSpinner';
+import HelpCard from '../Common/HelpCard';
 import { createDeploymentStream } from '../../services/api';
 
 function ImportStep4({ onBack, data, onReset }) {
@@ -113,6 +114,38 @@ function ImportStep4({ onBack, data, onReset }) {
         <p className="text-sm text-gray-600">
           Your configuration is ready! You can deploy it directly to HubSpot or save it as a reusable template.
         </p>
+      </div>
+
+      {/* Step 4 Help Card */}
+      <div className="mb-6">
+        <HelpCard type="tip" title="Step 4: Deploy or Save Your Configuration">
+          <div className="space-y-2">
+            <p>Choose how to proceed with your validated property configuration:</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+              <div>
+                <strong>Deploy to HubSpot:</strong>
+                <ul className="mt-1 space-y-1 text-xs">
+                  <li>• Creates properties in your HubSpot account</li>
+                  <li>• Sets up property groups automatically</li>
+                  <li>• Takes ~{estimatedTime?.estimatedSeconds || 30} seconds</li>
+                  <li>• Requires API key with CRM permissions</li>
+                </ul>
+              </div>
+              <div>
+                <strong>Save as Template:</strong>
+                <ul className="mt-1 space-y-1 text-xs">
+                  <li>• Saves configuration for future use</li>
+                  <li>• Reuse for similar client setups</li>
+                  <li>• Can be deployed later</li>
+                  <li>• Shareable with team members</li>
+                </ul>
+              </div>
+            </div>
+            <p className="text-sm font-medium text-yellow-700 mt-2">
+              Deployment cannot be undone - make sure your mappings are correct!
+            </p>
+          </div>
+        </HelpCard>
       </div>
 
       {/* Configuration Summary */}

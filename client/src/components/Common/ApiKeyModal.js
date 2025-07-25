@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog } from '@headlessui/react';
-import { XMarkIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon, EyeIcon, EyeSlashIcon, InformationCircleIcon, ExternalLinkIcon } from '@heroicons/react/24/outline';
 import { useApp } from '../../context/AppContext';
 import { validationAPI } from '../../services/api';
 import LoadingSpinner from './LoadingSpinner';
+import HelpCard from './HelpCard';
 
 function ApiKeyModal({ isOpen, onClose }) {
   const { apiKey, setApiKey, showSuccess, setError } = useApp();
@@ -108,11 +109,44 @@ function ApiKeyModal({ isOpen, onClose }) {
             </button>
           </div>
 
-          {/* Content */}
+          {/* Help Instructions */}
+          <div className="mt-6">
+            <HelpCard type="info" title="How to get your HubSpot API Key">
+              <ol className="space-y-2 text-sm">
+                <li><strong>1.</strong> Go to your HubSpot account settings</li>
+                <li><strong>2.</strong> Navigate to <strong>Integrations → Private Apps</strong></li>
+                <li><strong>3.</strong> Click <strong>"Create a private app"</strong></li>
+                <li><strong>4.</strong> Give it a name like "Automation Platform"</li>
+                <li><strong>5.</strong> In the <strong>Scopes</strong> tab, select:
+                  <ul className="ml-4 mt-1 space-y-1">
+                    <li>• CRM (all permissions)</li>
+                    <li>• Settings (read/write)</li>
+                  </ul>
+                </li>
+                <li><strong>6.</strong> Click <strong>"Create app"</strong> and copy your access token</li>
+              </ol>
+              <div className="mt-3 pt-3 border-t border-blue-200">
+                <a 
+                  href="https://developers.hubspot.com/docs/api/private-apps"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center text-sm text-blue-600 hover:text-blue-700"
+                >
+                  <ExternalLinkIcon className="h-4 w-4 mr-1" />
+                  View HubSpot Documentation
+                </a>
+              </div>
+            </HelpCard>
+          </div>
+
+          {/* API Key Input */}
           <div className="mt-6">
             <label htmlFor="api-key" className="block text-sm font-medium text-gray-700">
-              API Key
+              API Key <span className="text-red-500">*</span>
             </label>
+            <p className="text-xs text-gray-500 mt-1 mb-2">
+              Paste your HubSpot Private App access token here (starts with "pat-")
+            </p>
             <div className="mt-1 relative">
               <input
                 type={showKey ? 'text' : 'password'}
