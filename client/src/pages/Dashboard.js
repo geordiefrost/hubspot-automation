@@ -10,6 +10,7 @@ import {
   ExclamationTriangleIcon,
   ClockIcon,
   InformationCircleIcon,
+  BeakerIcon,
 } from '@heroicons/react/24/outline';
 import { deploymentAPI, templateAPI } from '../services/api';
 import { useApp } from '../context/AppContext';
@@ -46,6 +47,14 @@ function Dashboard() {
   const templates = templatesData?.data?.templates || [];
 
   const quickActions = [
+    {
+      name: 'Quick Test',
+      description: 'Quickly test field creation with a simple interface',
+      href: '/quick-test',
+      icon: BeakerIcon,
+      iconColor: 'text-orange-600',
+      bgColor: 'bg-orange-100',
+    },
     {
       name: 'Create Template',
       description: 'Start building a new HubSpot setup template',
@@ -111,6 +120,11 @@ function Dashboard() {
             <div className="mb-6">
               <HelpCard type="tip" title="Quick Actions">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+                  <Link to="/quick-test" className="text-sm bg-white border border-gray-200 rounded-lg p-3 hover:bg-gray-50 block">
+                    <BeakerIcon className="h-5 w-5 mb-2 text-orange-600" />
+                    <div className="font-medium">Quick Test</div>
+                    <div className="text-gray-600 text-xs">Test field creation easily</div>
+                  </Link>
                   <Link to="/import" className="text-sm bg-white border border-gray-200 rounded-lg p-3 hover:bg-gray-50 block">
                     <CloudArrowUpIcon className="h-5 w-5 mb-2 text-blue-600" />
                     <div className="font-medium">Import Configuration</div>

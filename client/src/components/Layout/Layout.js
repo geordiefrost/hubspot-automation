@@ -8,12 +8,14 @@ import {
   CogIcon,
   Bars3Icon,
   XMarkIcon,
+  BeakerIcon,
 } from '@heroicons/react/24/outline';
 import { useApp } from '../../context/AppContext';
 import ApiKeyModal from '../Common/ApiKeyModal';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: HomeIcon },
+  { name: 'Quick Test', href: '/quick-test', icon: BeakerIcon },
   { name: 'Templates', href: '/templates', icon: DocumentDuplicateIcon },
   { name: 'Deployments', href: '/deployments', icon: ArrowPathIcon },
   { name: 'Import', href: '/import', icon: CloudArrowUpIcon },

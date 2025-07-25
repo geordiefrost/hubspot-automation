@@ -11,6 +11,7 @@ import TemplateEditor from './pages/TemplateEditor';
 import Deployments from './pages/Deployments';
 import DeploymentDetail from './pages/DeploymentDetail';
 import Import from './pages/Import';
+import QuickTest from './pages/QuickTest';
 import Settings from './pages/Settings';
 
 // Context
@@ -30,6 +31,7 @@ function App() {
               <Route path="/deployments" element={<Deployments />} />
               <Route path="/deployments/:id" element={<DeploymentDetail />} />
               <Route path="/import" element={<Import />} />
+              <Route path="/quick-test" element={<QuickTest />} />
               <Route path="/settings" element={<Settings />} />
             </Routes>
           </Layout>
