@@ -22,9 +22,8 @@ const navigation = [
 
 function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [apiKeyModalOpen, setApiKeyModalOpen] = useState(false);
   const location = useLocation();
-  const { apiKey } = useApp();
+  const { apiKey, showApiKeyModal, setShowApiKeyModal } = useApp();
 
   const isCurrentPage = (href) => {
     if (href === '/') {
@@ -34,7 +33,7 @@ function Layout({ children }) {
   };
 
   const handleApiKeyClick = () => {
-    setApiKeyModalOpen(true);
+    setShowApiKeyModal(true);
   };
 
   return (
@@ -96,8 +95,8 @@ function Layout({ children }) {
 
       {/* API Key Modal */}
       <ApiKeyModal
-        isOpen={apiKeyModalOpen}
-        onClose={() => setApiKeyModalOpen(false)}
+        isOpen={showApiKeyModal}
+        onClose={() => setShowApiKeyModal(false)}
       />
     </div>
   );

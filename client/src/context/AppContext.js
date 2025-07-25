@@ -6,6 +6,7 @@ const initialState = {
   apiKey: localStorage.getItem('hubspot_api_key') || '',
   currentDeployment: null,
   deploymentProgress: null,
+  showApiKeyModal: false,
   settings: {
     darkMode: localStorage.getItem('dark_mode') === 'true',
     notifications: localStorage.getItem('notifications') !== 'false',
@@ -21,6 +22,7 @@ const ActionTypes = {
   SET_API_KEY: 'SET_API_KEY',
   SET_CURRENT_DEPLOYMENT: 'SET_CURRENT_DEPLOYMENT',
   SET_DEPLOYMENT_PROGRESS: 'SET_DEPLOYMENT_PROGRESS',
+  SET_SHOW_API_KEY_MODAL: 'SET_SHOW_API_KEY_MODAL',
   UPDATE_SETTINGS: 'UPDATE_SETTINGS',
   SET_USER: 'SET_USER',
   SET_LOADING: 'SET_LOADING',
@@ -52,6 +54,12 @@ function appReducer(state, action) {
       return {
         ...state,
         deploymentProgress: action.payload,
+      };
+
+    case ActionTypes.SET_SHOW_API_KEY_MODAL:
+      return {
+        ...state,
+        showApiKeyModal: action.payload,
       };
 
     case ActionTypes.UPDATE_SETTINGS:
@@ -116,6 +124,10 @@ export function AppProvider({ children }) {
 
     setDeploymentProgress: (progress) => {
       dispatch({ type: ActionTypes.SET_DEPLOYMENT_PROGRESS, payload: progress });
+    },
+
+    setShowApiKeyModal: (show) => {
+      dispatch({ type: ActionTypes.SET_SHOW_API_KEY_MODAL, payload: show });
     },
 
     updateSettings: (settings) => {

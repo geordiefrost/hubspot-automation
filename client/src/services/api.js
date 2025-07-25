@@ -44,48 +44,37 @@ api.interceptors.response.use(
 // API endpoints
 export const templateAPI = {
   list: (params = {}) => api.get('/templates', { params }),
-  getById: (id) => api.get(`/templates/${id}`),
-  create: (data) => api.post('/templates', data),
-  update: (id, data) => api.put(`/templates/${id}`, data),
-  delete: (id) => api.delete(`/templates/${id}`),
-  duplicate: (id, name) => api.post(`/templates/${id}/duplicate`, { name }),
-  export: (id) => api.get(`/templates/${id}/export`),
-  import: (data) => api.post('/templates/import', data),
-  getIndustries: () => api.get('/templates/industries'),
+  getById: (id) => api.get('/templates', { params: { id } }),
+  create: (data) => api.post('/templates', { action: 'create', ...data }),
+  update: (id, data) => api.put('/templates', { ...data }, { params: { id } }),
+  delete: (id) => api.delete('/templates', { params: { id } }),
+  getIndustryTemplates: () => api.get('/templates', { params: { action: 'industry-templates' } }),
+  getIndustryTemplate: (industry) => api.get('/templates', { params: { action: 'industry-template', industry } }),
+  deployIndustryTemplate: (data) => api.post('/templates', { action: 'deploy-industry-template', ...data }),
 };
 
 export const deploymentAPI = {
   list: (params = {}) => api.get('/deployments', { params }),
-  getById: (id) => api.get(`/deployments/${id}`),
-  deploy: (data) => {
-    // Return a function that creates the EventSource
-    return () => {
-      const eventSource = new EventSource(
-        `${api.defaults.baseURL}/deployments?${new URLSearchParams(data)}`
-      );
-      return eventSource;
-    };
+  getById: (id) => api.get('/deployments', { params: { id } }),
+  create: (data) => api.post('/deployments', { action: 'create', ...data }),
+  getStats: () => api.get('/deployments', { params: { action: 'stats' } }),
+  getStream: (deploymentId) => {
+    return new EventSource(`/api/deployments?action=stream&deploymentId=${deploymentId}`);
   },
-  deployPost: (data) => api.post('/deployments', data),
-  rollback: (id, apiKey) => api.post(`/deployments/${id}/rollback`, { apiKey }),
-  retry: (id, apiKey) => api.post(`/deployments/${id}/retry`, { apiKey }),
-  validate: (data) => api.post('/deployments/validate', data),
-  getStats: () => api.get('/deployments/stats'),
 };
 
 export const importAPI = {
-  parseCSV: (data) => api.post('/import/csv', data),
-  parseExcelPaste: (data) => api.post('/import/excel-paste', data),
-  analyseFields: (data) => api.post('/import/analyse', data),
-  validateMappings: (data) => api.post('/import/validate-mappings', data),
-  previewConfiguration: (data) => api.post('/import/preview', data),
+  downloadTemplate: (configType) => api.get('/import', { 
+    params: { action: 'download-template', configType },
+    responseType: 'blob'
+  }),
+  parseCSV: (data) => api.post('/import', { action: 'parse-csv', ...data }),
+  validateConfig: (data) => api.post('/import', { action: 'validate-config', ...data }),
+  previewDeployment: (data) => api.post('/import', { action: 'preview-deployment', ...data }),
 };
 
 export const validationAPI = {
-  validateApiKey: (apiKey) => api.post('/validate/api-key', { apiKey }),
-  validatePropertyName: (data) => api.post('/validate/property-name', data),
-  validatePipelineName: (data) => api.post('/validate/pipeline-name', data),
-  validateConfiguration: (data) => api.post('/validate/configuration', data),
+  validateApiKey: (apiKey) => api.post('/validate', { action: 'api-key', apiKey }),
 };
 
 // Utility functions
