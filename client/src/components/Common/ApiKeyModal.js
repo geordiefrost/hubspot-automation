@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog } from '@headlessui/react';
-import { XMarkIcon, EyeIcon, EyeSlashIcon, InformationCircleIcon, ExternalLinkIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon, EyeIcon, EyeSlashIcon, InformationCircleIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
 import { useApp } from '../../context/AppContext';
 import { validationAPI } from '../../services/api';
 import LoadingSpinner from './LoadingSpinner';
@@ -132,7 +132,7 @@ function ApiKeyModal({ isOpen, onClose }) {
                   rel="noopener noreferrer"
                   className="inline-flex items-center text-sm text-blue-600 hover:text-blue-700"
                 >
-                  <ExternalLinkIcon className="h-4 w-4 mr-1" />
+                  <ArrowTopRightOnSquareIcon className="h-4 w-4 mr-1" />
                   View HubSpot Documentation
                 </a>
               </div>
