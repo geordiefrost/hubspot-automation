@@ -18,6 +18,7 @@ import { useApp } from '../context/AppContext';
 import PageHeader from '../components/Common/PageHeader';
 import HelpCard from '../components/Common/HelpCard';
 import LoadingSpinner from '../components/Common/LoadingSpinner';
+import { InfoTooltip } from '../components/Common/Tooltip';
 
 const EXAMPLE_TEMPLATES = [
   {
@@ -320,11 +321,25 @@ function TemplateCard({ template }) {
         <div className="grid grid-cols-2 gap-4 mb-4 pt-4 border-t border-gray-100">
           <div>
             <div className="text-sm font-medium text-gray-900">{template.properties}</div>
-            <div className="text-xs text-gray-500">Properties</div>
+            <div className="text-xs text-gray-500 flex items-center">
+              Properties
+              <InfoTooltip 
+                content="Number of custom HubSpot properties included in this template"
+                className="ml-1"
+                position="bottom"
+              />
+            </div>
           </div>
           <div>
             <div className="text-sm font-medium text-gray-900">{template.usageCount}</div>
-            <div className="text-xs text-gray-500">Times Used</div>
+            <div className="text-xs text-gray-500 flex items-center">
+              Times Used
+              <InfoTooltip 
+                content="How many times this template has been deployed to HubSpot accounts"
+                className="ml-1"
+                position="bottom"
+              />
+            </div>
           </div>
         </div>
 

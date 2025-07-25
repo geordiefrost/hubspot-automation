@@ -17,6 +17,7 @@ import PageHeader from '../components/Common/PageHeader';
 import LoadingSpinner from '../components/Common/LoadingSpinner';
 import HelpCard from '../components/Common/HelpCard';
 import GettingStarted from '../components/Common/GettingStarted';
+import { InfoTooltip } from '../components/Common/Tooltip';
 
 function Dashboard() {
   const { apiKey } = useApp();
@@ -132,7 +133,10 @@ function Dashboard() {
             {/* Stats Overview */}
             <div className="mb-8">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-medium text-gray-900">Overview</h2>
+                <div className="flex items-center">
+                  <h2 className="text-lg font-medium text-gray-900 mr-2">Overview</h2>
+                  <InfoTooltip content="Statistics about your HubSpot automation deployments and overall platform usage" />
+                </div>
                 <button 
                   onClick={() => setShowGettingStarted(true)}
                   className="text-sm text-primary-600 hover:text-primary-700"
@@ -146,6 +150,7 @@ function Dashboard() {
                   value={stats.totalDeployments || 0}
                   icon={ChartBarIcon}
                   loading={statsLoading}
+                  tooltip="Total number of HubSpot configurations deployed to client accounts"
                 />
                 <StatCard
                   title="Success Rate"
@@ -153,6 +158,7 @@ function Dashboard() {
                   icon={CheckCircleIcon}
                   iconColor="text-green-600"
                   loading={statsLoading}
+                  tooltip="Percentage of deployments that completed successfully without errors"
                 />
                 <StatCard
                   title="Failed Deployments"
@@ -160,6 +166,7 @@ function Dashboard() {
                   icon={ExclamationTriangleIcon}
                   iconColor="text-red-600"
                   loading={statsLoading}
+                  tooltip="Deployments that encountered errors and could not complete"
                 />
                 <StatCard
                   title="In Progress"
@@ -167,6 +174,7 @@ function Dashboard() {
                   icon={ClockIcon}
                   iconColor="text-yellow-600"
                   loading={statsLoading}
+                  tooltip="Deployments currently running - these typically take 30-60 seconds"
                 />
               </div>
             </div>
@@ -320,7 +328,7 @@ function ApiKeyPrompt() {
   );
 }
 
-function StatCard({ title, value, icon: Icon, iconColor = 'text-primary-600', loading }) {
+function StatCard({ title, value, icon: Icon, iconColor = 'text-primary-600', loading, tooltip }) {
   return (
     <div className="card">
       <div className="card-body">
@@ -330,7 +338,10 @@ function StatCard({ title, value, icon: Icon, iconColor = 'text-primary-600', lo
           </div>
           <div className="ml-5 w-0 flex-1">
             <dl>
-              <dt className="text-sm font-medium text-gray-500 truncate">{title}</dt>
+              <dt className="text-sm font-medium text-gray-500 truncate flex items-center">
+                {title}
+                {tooltip && <InfoTooltip content={tooltip} className="ml-1" />}
+              </dt>
               <dd className="text-lg font-medium text-gray-900">
                 {loading ? <LoadingSpinner className="inline-block" /> : value}
               </dd>

@@ -5,6 +5,7 @@ import { useApp } from '../../context/AppContext';
 import { validationAPI } from '../../services/api';
 import LoadingSpinner from './LoadingSpinner';
 import HelpCard from './HelpCard';
+import { InfoTooltip } from './Tooltip';
 
 function ApiKeyModal({ isOpen, onClose }) {
   const { apiKey, setApiKey, showSuccess, setError } = useApp();
@@ -141,8 +142,12 @@ function ApiKeyModal({ isOpen, onClose }) {
 
           {/* API Key Input */}
           <div className="mt-6">
-            <label htmlFor="api-key" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="api-key" className="block text-sm font-medium text-gray-700 flex items-center">
               API Key <span className="text-red-500">*</span>
+              <InfoTooltip 
+                content="Your HubSpot Private App access token. Should start with 'pat-' and is found in your HubSpot app settings."
+                className="ml-2"
+              />
             </label>
             <p className="text-xs text-gray-500 mt-1 mb-2">
               Paste your HubSpot Private App access token here (starts with "pat-")

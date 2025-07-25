@@ -11,6 +11,7 @@ import { importAPI } from '../../services/api';
 import { useApp } from '../../context/AppContext';
 import LoadingSpinner from '../Common/LoadingSpinner';
 import HelpCard from '../Common/HelpCard';
+import { InfoTooltip } from '../Common/Tooltip';
 
 const OBJECT_TYPES = [
   { value: 'contact', label: 'Contacts', description: 'People in your CRM' },
@@ -153,8 +154,12 @@ function ImportStep1({ onComplete, data }) {
 
       {/* Object Type Selection */}
       <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-3">
+        <label className="block text-sm font-medium text-gray-700 mb-3 flex items-center">
           What type of data are you importing?
+          <InfoTooltip 
+            content="Choose the HubSpot object type that matches your data. This determines which properties will be available for mapping." 
+            className="ml-2"
+          />
         </label>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           {OBJECT_TYPES.map((type) => (
