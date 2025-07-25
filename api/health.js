@@ -1,7 +1,7 @@
-import supabase from '../lib/supabase.js';
-import { corsHeaders, handleError } from '../lib/cors.js';
+const supabase = require('../lib/supabase.js');
+const { corsHeaders, handleError } = require('../lib/cors.js');
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   // Handle CORS
   if (corsHeaders(req, res)) return;
 

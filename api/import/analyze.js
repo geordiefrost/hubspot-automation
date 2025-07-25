@@ -1,4 +1,4 @@
-import { corsHeaders, handleError } from '../../lib/cors.js';
+const { corsHeaders, handleError } = require('../../lib/cors.js');
 
 // Property type detection patterns
 const PROPERTY_PATTERNS = {
@@ -66,7 +66,7 @@ function transformFieldName(fieldName) {
     .substring(0, 50);
 }
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   // Handle CORS
   if (corsHeaders(req, res)) return;
 
