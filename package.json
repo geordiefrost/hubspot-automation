@@ -2,7 +2,7 @@
   "name": "hubspot-automation-platform",
   "version": "1.0.0",
   "description": "HubSpot setup automation platform for Bang Digital",
-  "main": "server/index.js",
+  "main": "api/health.js",
   "scripts": {
     "build": "cd client && npm install && npm run build",
     "dev": "vercel dev",
