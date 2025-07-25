@@ -1,5 +1,7 @@
 const supabase = require('../lib/supabase.js');
 const { corsHeaders, handleError } = require('../lib/cors.js');
+const fs = require('fs');
+const path = require('path');
 
 module.exports = async function handler(req, res) {
   // Handle CORS
@@ -7,10 +9,14 @@ module.exports = async function handler(req, res) {
 
   try {
     const { method, query, body } = req;
-    const { action, id } = query;
+    const { action, id, industry } = query;
 
     if (method === 'GET') {
-      if (id) {
+      if (action === 'industry-templates') {
+        return await handleGetIndustryTemplates(req, res);
+      } else if (action === 'industry-template' && industry) {
+        return await handleGetIndustryTemplate(req, res, industry);
+      } else if (id) {
         return await handleGetTemplate(req, res, id);
       } else {
         return await handleListTemplates(req, res);
@@ -18,9 +24,11 @@ module.exports = async function handler(req, res) {
     } else if (method === 'POST') {
       if (action === 'create') {
         return await handleCreateTemplate(req, res, body);
+      } else if (action === 'deploy-industry-template') {
+        return await handleDeployIndustryTemplate(req, res, body);
       } else {
         return res.status(400).json({
-          error: { code: '400', message: 'Invalid action. Must be "create"' }
+          error: { code: '400', message: 'Invalid action. Must be "create" or "deploy-industry-template"' }
         });
       }
     } else if (method === 'PUT' && id) {
@@ -153,4 +161,175 @@ async function handleDeleteTemplate(req, res, id) {
     success: true,
     message: 'Template deleted successfully'
   });
+}
+
+async function handleGetIndustryTemplates(req, res) {
+  try {
+    const templatesDir = path.join(process.cwd(), 'templates', 'industry');
+    const files = fs.readdirSync(templatesDir);
+    
+    const templates = files
+      .filter(file => file.endsWith('.json'))
+      .map(file => {
+        const filePath = path.join(templatesDir, file);
+        const content = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+        return {
+          id: file.replace('.json', ''),
+          name: content.name,
+          description: content.description,
+          industry: content.industry,
+          categories: content.categories,
+          configCount: {
+            customProperties: content.configurations['custom-properties']?.length || 0,
+            propertyGroups: content.configurations['property-groups']?.length || 0,
+            dealPipelines: content.configurations['deal-pipelines'] ? 
+              Object.keys(content.configurations['deal-pipelines'].reduce((acc, stage) => {
+                acc[stage.pipeline_name] = true;
+                return acc;
+              }, {})).length : 0,
+            ticketPipelines: content.configurations['ticket-pipelines'] ? 
+              Object.keys(content.configurations['ticket-pipelines'].reduce((acc, stage) => {
+                acc[stage.pipeline_name] = true;
+                return acc;
+              }, {})).length : 0,
+            products: content.configurations['products']?.length || 0
+          }
+        };
+      });
+
+    res.status(200).json({
+      success: true,
+      data: templates
+    });
+  } catch (error) {
+    console.error('Error reading industry templates:', error);
+    res.status(500).json({
+      error: 'Failed to load industry templates'
+    });
+  }
+}
+
+async function handleGetIndustryTemplate(req, res, industry) {
+  try {
+    const templatePath = path.join(process.cwd(), 'templates', 'industry', `${industry}.json`);
+    
+    if (!fs.existsSync(templatePath)) {
+      return res.status(404).json({
+        error: { code: '404', message: 'Industry template not found' }
+      });
+    }
+
+    const template = JSON.parse(fs.readFileSync(templatePath, 'utf8'));
+
+    res.status(200).json({
+      success: true,
+      data: template
+    });
+  } catch (error) {
+    console.error('Error reading industry template:', error);
+    res.status(500).json({
+      error: 'Failed to load industry template'
+    });
+  }
+}
+
+async function handleDeployIndustryTemplate(req, res, { industry, clientName, apiKey, selectedCategories }) {
+  if (!industry || !clientName || !apiKey) {
+    return res.status(400).json({
+      error: 'Industry, client name, and API key are required'
+    });
+  }
+
+  try {
+    const templatePath = path.join(process.cwd(), 'templates', 'industry', `${industry}.json`);
+    
+    if (!fs.existsSync(templatePath)) {
+      return res.status(404).json({
+        error: { code: '404', message: 'Industry template not found' }
+      });
+    }
+
+    const template = JSON.parse(fs.readFileSync(templatePath, 'utf8'));
+    
+    // Filter configurations based on selected categories
+    const filteredConfig = {};
+    const categoriesToDeploy = selectedCategories || template.categories;
+    
+    categoriesToDeploy.forEach(category => {
+      if (template.configurations[category]) {
+        filteredConfig[category] = template.configurations[category];
+      }
+    });
+
+    // Convert to deployment format
+    const deploymentConfig = {
+      properties: {},
+      propertyGroups: filteredConfig['property-groups'] || [],
+      dealPipelines: filteredConfig['deal-pipelines'] || [],
+      ticketPipelines: filteredConfig['ticket-pipelines'] || [],
+      products: filteredConfig['products'] || []
+    };
+
+    // Group properties by object type
+    if (filteredConfig['custom-properties']) {
+      filteredConfig['custom-properties'].forEach(prop => {
+        if (!deploymentConfig.properties[prop.object_type]) {
+          deploymentConfig.properties[prop.object_type] = [];
+        }
+        deploymentConfig.properties[prop.object_type].push({
+          name: prop.name,
+          label: prop.label,
+          type: prop.type,
+          fieldType: prop.field_type,
+          groupName: prop.group_name,
+          description: prop.description,
+          options: prop.options ? prop.options.split(',').map(opt => ({
+            label: opt.trim(),
+            value: opt.toLowerCase().replace(/\s+/g, '_')
+          })) : undefined,
+          hasUniqueValue: prop.unique === 'true',
+          formField: prop.required === 'true'
+        });
+      });
+    }
+
+    // Create deployment via deployments API
+    const deploymentResponse = await fetch(`${req.headers.origin || 'http://localhost:3000'}/api/deployments`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        action: 'create',
+        clientName: `${clientName} - ${template.name}`,
+        config: deploymentConfig,
+        apiKey
+      })
+    });
+
+    if (!deploymentResponse.ok) {
+      const error = await deploymentResponse.json();
+      throw new Error(error.error || 'Failed to create deployment');
+    }
+
+    const deployment = await deploymentResponse.json();
+
+    res.status(200).json({
+      success: true,
+      data: {
+        deploymentId: deployment.data.deploymentId,
+        templateName: template.name,
+        industry: template.industry,
+        categoriesDeployed: categoriesToDeploy,
+        message: 'Industry template deployment started successfully'
+      }
+    });
+
+  } catch (error) {
+    console.error('Error deploying industry template:', error);
+    res.status(500).json({
+      error: 'Failed to deploy industry template',
+      details: error.message
+    });
+  }
 }

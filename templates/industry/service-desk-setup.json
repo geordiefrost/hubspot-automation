@@ -1,0 +1,265 @@
+{
+  "name": "Service Desk Setup",
+  "description": "Complete customer service and support configuration with ticket management, SLA tracking, and customer properties",
+  "industry": "service",
+  "categories": ["custom-properties", "property-groups", "ticket-pipelines"],
+  "configurations": {
+    "custom-properties": [
+      {
+        "object_type": "contact",
+        "name": "support_tier",
+        "label": "Support Tier",
+        "type": "enumeration",
+        "field_type": "select",
+        "group_name": "support_information",
+        "description": "Customer support tier level",
+        "options": "Basic,Premium,Enterprise,VIP",
+        "required": "false"
+      },
+      {
+        "object_type": "contact",
+        "name": "technical_contact",
+        "label": "Technical Contact",
+        "type": "bool",
+        "field_type": "booleancheckbox",
+        "group_name": "support_information",
+        "description": "Is this contact authorized for technical discussions",
+        "required": "false"
+      },
+      {
+        "object_type": "contact",
+        "name": "preferred_contact_method",
+        "label": "Preferred Contact Method",
+        "type": "enumeration",
+        "field_type": "select",
+        "group_name": "support_information",
+        "description": "Customer's preferred method of contact",
+        "options": "Email,Phone,Chat,SMS",
+        "required": "false"
+      },
+      {
+        "object_type": "company",
+        "name": "support_contract_type",
+        "label": "Support Contract Type",
+        "type": "enumeration",
+        "field_type": "select",
+        "group_name": "contract_information",
+        "description": "Type of support contract",
+        "options": "Standard,Premium,Enterprise,Custom",
+        "required": "false"
+      },
+      {
+        "object_type": "company",
+        "name": "sla_response_time",
+        "label": "SLA Response Time (Hours)",
+        "type": "number",
+        "field_type": "number",
+        "group_name": "contract_information",
+        "description": "Contracted response time in hours",
+        "required": "false"
+      },
+      {
+        "object_type": "ticket",
+        "name": "severity_level",
+        "label": "Severity Level",
+        "type": "enumeration",
+        "field_type": "select",
+        "group_name": "ticket_classification",
+        "description": "Technical severity level of the issue",
+        "options": "P1 - Critical,P2 - High,P3 - Medium,P4 - Low",
+        "required": "true"
+      },
+      {
+        "object_type": "ticket",
+        "name": "issue_category",
+        "label": "Issue Category",
+        "type": "enumeration",
+        "field_type": "select",
+        "group_name": "ticket_classification",
+        "description": "Category of the reported issue",
+        "options": "Bug,Feature Request,Configuration,Training,Integration,Performance",
+        "required": "true"
+      },
+      {
+        "object_type": "ticket",
+        "name": "escalation_required",
+        "label": "Escalation Required",
+        "type": "bool",
+        "field_type": "booleancheckbox",
+        "group_name": "ticket_management",
+        "description": "Whether this ticket requires escalation",
+        "required": "false"
+      },
+      {
+        "object_type": "ticket",
+        "name": "resolution_notes",
+        "label": "Resolution Notes",
+        "type": "string",
+        "field_type": "textarea",
+        "group_name": "ticket_resolution",
+        "description": "Detailed notes on how the issue was resolved",
+        "required": "false"
+      },
+      {
+        "object_type": "ticket",
+        "name": "customer_satisfaction_score",
+        "label": "Customer Satisfaction Score",
+        "type": "enumeration",
+        "field_type": "select",
+        "group_name": "ticket_resolution",
+        "description": "Customer satisfaction rating for resolution",
+        "options": "1 - Very Dissatisfied,2 - Dissatisfied,3 - Neutral,4 - Satisfied,5 - Very Satisfied",
+        "required": "false"
+      }
+    ],
+    "property-groups": [
+      {
+        "object_type": "contact",
+        "name": "support_information",
+        "display_name": "Support Information",
+        "display_order": "1",
+        "description": "Customer support preferences and authorization levels"
+      },
+      {
+        "object_type": "company",
+        "name": "contract_information",
+        "display_name": "Contract Information",
+        "display_order": "1",
+        "description": "Support contract details and SLA information"
+      },
+      {
+        "object_type": "ticket",
+        "name": "ticket_classification",
+        "display_name": "Ticket Classification",
+        "display_order": "1",
+        "description": "Issue categorization and severity classification"
+      },
+      {
+        "object_type": "ticket",
+        "name": "ticket_management",
+        "display_name": "Ticket Management",
+        "display_order": "2",
+        "description": "Ticket routing and escalation management"
+      },
+      {
+        "object_type": "ticket",
+        "name": "ticket_resolution",
+        "display_name": "Ticket Resolution",
+        "display_order": "3",
+        "description": "Resolution tracking and customer feedback"
+      }
+    ],
+    "ticket-pipelines": [
+      {
+        "pipeline_name": "support_pipeline",
+        "pipeline_label": "Customer Support",
+        "stage_name": "new",
+        "stage_label": "New Ticket",
+        "stage_order": "1",
+        "sla_hours": "2",
+        "required_properties": "severity_level,issue_category",
+        "auto_assign": "true"
+      },
+      {
+        "pipeline_name": "support_pipeline",
+        "pipeline_label": "Customer Support",
+        "stage_name": "acknowledged",
+        "stage_label": "Acknowledged",
+        "stage_order": "2",
+        "sla_hours": "4",
+        "required_properties": "hs_ticket_priority",
+        "auto_assign": "false"
+      },
+      {
+        "pipeline_name": "support_pipeline",
+        "pipeline_label": "Customer Support",
+        "stage_name": "in_progress",
+        "stage_label": "In Progress",
+        "stage_order": "3",
+        "sla_hours": "24",
+        "required_properties": "hubspot_owner_id",
+        "auto_assign": "false"
+      },
+      {
+        "pipeline_name": "support_pipeline",
+        "pipeline_label": "Customer Support",
+        "stage_name": "waiting_customer",
+        "stage_label": "Waiting on Customer",
+        "stage_order": "4",
+        "sla_hours": "",
+        "required_properties": "",
+        "auto_assign": "false"
+      },
+      {
+        "pipeline_name": "support_pipeline",
+        "pipeline_label": "Customer Support",
+        "stage_name": "resolved",
+        "stage_label": "Resolved",
+        "stage_order": "5",
+        "sla_hours": "1",
+        "required_properties": "resolution_notes",
+        "auto_assign": "false"
+      },
+      {
+        "pipeline_name": "support_pipeline",
+        "pipeline_label": "Customer Support",
+        "stage_name": "closed",
+        "stage_label": "Closed",
+        "stage_order": "6",
+        "sla_hours": "",
+        "required_properties": "customer_satisfaction_score",
+        "auto_assign": "false"
+      },
+      {
+        "pipeline_name": "escalation_pipeline",
+        "pipeline_label": "Escalation Management",
+        "stage_name": "escalated",
+        "stage_label": "Escalated",
+        "stage_order": "1",
+        "sla_hours": "1",
+        "required_properties": "escalation_required,severity_level",
+        "auto_assign": "true"
+      },
+      {
+        "pipeline_name": "escalation_pipeline",
+        "pipeline_label": "Escalation Management",
+        "stage_name": "manager_review",
+        "stage_label": "Manager Review",
+        "stage_order": "2",
+        "sla_hours": "4",
+        "required_properties": "hubspot_owner_id",
+        "auto_assign": "false"
+      },
+      {
+        "pipeline_name": "escalation_pipeline",
+        "pipeline_label": "Escalation Management",
+        "stage_name": "engineering_review",
+        "stage_label": "Engineering Review",
+        "stage_order": "3",
+        "sla_hours": "8",
+        "required_properties": "",
+        "auto_assign": "false"
+      },
+      {
+        "pipeline_name": "escalation_pipeline",
+        "pipeline_label": "Escalation Management",
+        "stage_name": "resolution_in_progress",
+        "stage_label": "Resolution in Progress",
+        "stage_order": "4",
+        "sla_hours": "48",
+        "required_properties": "",
+        "auto_assign": "false"
+      },
+      {
+        "pipeline_name": "escalation_pipeline",
+        "pipeline_label": "Escalation Management",
+        "stage_name": "resolved",
+        "stage_label": "Resolved",
+        "stage_order": "5",
+        "sla_hours": "",
+        "required_properties": "resolution_notes",
+        "auto_assign": "false"
+      }
+    ]
+  }
+}

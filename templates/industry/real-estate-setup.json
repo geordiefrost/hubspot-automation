@@ -1,0 +1,417 @@
+{
+  "name": "Real Estate CRM Setup",
+  "description": "Real estate-focused CRM configuration with property tracking, client management, and sales pipeline optimization",
+  "industry": "real_estate", 
+  "categories": ["custom-properties", "property-groups", "deal-pipelines", "products"],
+  "configurations": {
+    "custom-properties": [
+      {
+        "object_type": "contact",
+        "name": "client_type",
+        "label": "Client Type",
+        "type": "enumeration",
+        "field_type": "select",
+        "group_name": "client_information",
+        "description": "Type of real estate client",
+        "options": "Buyer,Seller,Both,Investor,Renter,Landlord",
+        "required": "false"
+      },
+      {
+        "object_type": "contact",
+        "name": "price_range_min",
+        "label": "Price Range Minimum",
+        "type": "number",
+        "field_type": "number",
+        "group_name": "client_preferences",
+        "description": "Minimum price range for property search",
+        "required": "false"
+      },
+      {
+        "object_type": "contact",
+        "name": "price_range_max",
+        "label": "Price Range Maximum",
+        "type": "number",
+        "field_type": "number",
+        "group_name": "client_preferences",
+        "description": "Maximum price range for property search",
+        "required": "false"
+      },
+      {
+        "object_type": "contact",
+        "name": "preferred_areas",
+        "label": "Preferred Areas",
+        "type": "string",
+        "field_type": "textarea",
+        "group_name": "client_preferences",
+        "description": "Preferred neighborhoods or areas",
+        "required": "false"
+      },
+      {
+        "object_type": "contact",
+        "name": "financing_preapproved",
+        "label": "Financing Pre-approved",
+        "type": "bool",
+        "field_type": "booleancheckbox",
+        "group_name": "client_qualification",
+        "description": "Whether client has mortgage pre-approval",
+        "required": "false"
+      },
+      {
+        "object_type": "contact",
+        "name": "buying_timeline",
+        "label": "Buying Timeline",
+        "type": "enumeration",
+        "field_type": "select",
+        "group_name": "client_qualification",
+        "description": "Expected timeline for purchase",
+        "options": "Immediate,30 days,60 days,90 days,6 months,1 year+,Just Looking",
+        "required": "false"
+      },
+      {
+        "object_type": "deal",
+        "name": "property_address",
+        "label": "Property Address",
+        "type": "string",
+        "field_type": "text",
+        "group_name": "property_details",
+        "description": "Full address of the property",
+        "required": "true"
+      },
+      {
+        "object_type": "deal",
+        "name": "property_type",
+        "label": "Property Type",
+        "type": "enumeration",
+        "field_type": "select",
+        "group_name": "property_details",
+        "description": "Type of property",
+        "options": "Single Family Home,Condo,Townhouse,Multi-Family,Land,Commercial,Investment",
+        "required": "true"
+      },
+      {
+        "object_type": "deal",
+        "name": "square_footage",
+        "label": "Square Footage",
+        "type": "number",
+        "field_type": "number",
+        "group_name": "property_details",
+        "description": "Total square footage of property",
+        "required": "false"
+      },
+      {
+        "object_type": "deal",
+        "name": "bedrooms",
+        "label": "Bedrooms",
+        "type": "number",
+        "field_type": "number",
+        "group_name": "property_details",
+        "description": "Number of bedrooms",
+        "required": "false"
+      },
+      {
+        "object_type": "deal",
+        "name": "bathrooms",
+        "label": "Bathrooms",
+        "type": "number",
+        "field_type": "number",
+        "group_name": "property_details",
+        "description": "Number of bathrooms",
+        "required": "false"
+      },
+      {
+        "object_type": "deal",
+        "name": "listing_price",
+        "label": "Listing Price",
+        "type": "number",
+        "field_type": "number",
+        "group_name": "pricing_information",
+        "description": "Original listing price",
+        "required": "false"
+      },
+      {
+        "object_type": "deal",
+        "name": "final_sale_price",
+        "label": "Final Sale Price",
+        "type": "number",
+        "field_type": "number",
+        "group_name": "pricing_information",
+        "description": "Final agreed sale price",
+        "required": "false"
+      },
+      {
+        "object_type": "deal",
+        "name": "commission_rate",
+        "label": "Commission Rate (%)",
+        "type": "number",
+        "field_type": "number",
+        "group_name": "commission_tracking",
+        "description": "Commission rate percentage",
+        "required": "false"
+      },
+      {
+        "object_type": "deal",
+        "name": "commission_split",
+        "label": "Commission Split",
+        "type": "enumeration",
+        "field_type": "select",
+        "group_name": "commission_tracking",
+        "description": "How commission is split",
+        "options": "100/0,90/10,80/20,70/30,60/40,50/50",
+        "required": "false"
+      }
+    ],
+    "property-groups": [
+      {
+        "object_type": "contact",
+        "name": "client_information",
+        "display_name": "Client Information",
+        "display_order": "1",
+        "description": "Basic client categorization and type"
+      },
+      {
+        "object_type": "contact",
+        "name": "client_preferences",
+        "display_name": "Client Preferences",
+        "display_order": "2",
+        "description": "Property preferences and search criteria"
+      },
+      {
+        "object_type": "contact",
+        "name": "client_qualification",
+        "display_name": "Client Qualification",
+        "display_order": "3",
+        "description": "Qualification status and timeline information"
+      },
+      {
+        "object_type": "deal",
+        "name": "property_details",
+        "display_name": "Property Details",
+        "display_order": "1",
+        "description": "Physical property characteristics and details"
+      },
+      {
+        "object_type": "deal",
+        "name": "pricing_information",
+        "display_name": "Pricing Information",
+        "display_order": "2",
+        "description": "Listing and sale price tracking"
+      },
+      {
+        "object_type": "deal",
+        "name": "commission_tracking",
+        "display_name": "Commission Tracking",
+        "display_order": "3",
+        "description": "Commission rates and splits"
+      }
+    ],
+    "deal-pipelines": [
+      {
+        "pipeline_name": "buyer_pipeline",
+        "pipeline_label": "Buyer Pipeline",
+        "stage_name": "initial_consultation",
+        "stage_label": "Initial Consultation",
+        "stage_order": "1",
+        "probability": "10",
+        "required_properties": "client_type,price_range_min,price_range_max",
+        "stage_type": "open"
+      },
+      {
+        "pipeline_name": "buyer_pipeline",
+        "pipeline_label": "Buyer Pipeline",
+        "stage_name": "pre_approval",
+        "stage_label": "Pre-approval",
+        "stage_order": "2",
+        "probability": "25",
+        "required_properties": "financing_preapproved,buying_timeline",
+        "stage_type": "open"
+      },
+      {
+        "pipeline_name": "buyer_pipeline",
+        "pipeline_label": "Buyer Pipeline",
+        "stage_name": "property_search",
+        "stage_label": "Property Search",
+        "stage_order": "3",
+        "probability": "40",
+        "required_properties": "preferred_areas",
+        "stage_type": "open"
+      },
+      {
+        "pipeline_name": "buyer_pipeline",
+        "pipeline_label": "Buyer Pipeline",
+        "stage_name": "showing_scheduled",
+        "stage_label": "Showing Scheduled",
+        "stage_order": "4",
+        "probability": "60",
+        "required_properties": "property_address",
+        "stage_type": "open"
+      },
+      {
+        "pipeline_name": "buyer_pipeline",
+        "pipeline_label": "Buyer Pipeline",
+        "stage_name": "offer_submitted",
+        "stage_label": "Offer Submitted",
+        "stage_order": "5",
+        "probability": "75",
+        "required_properties": "listing_price",
+        "stage_type": "open"
+      },
+      {
+        "pipeline_name": "buyer_pipeline",
+        "pipeline_label": "Buyer Pipeline",
+        "stage_name": "under_contract",
+        "stage_label": "Under Contract",
+        "stage_order": "6",
+        "probability": "90",
+        "required_properties": "final_sale_price",
+        "stage_type": "open"
+      },
+      {
+        "pipeline_name": "buyer_pipeline",
+        "pipeline_label": "Buyer Pipeline",
+        "stage_name": "closed_won",
+        "stage_label": "Closed/Sold",
+        "stage_order": "7",
+        "probability": "100",
+        "required_properties": "commission_rate,closedate",
+        "stage_type": "closed_won"
+      },
+      {
+        "pipeline_name": "buyer_pipeline",
+        "pipeline_label": "Buyer Pipeline",
+        "stage_name": "closed_lost",
+        "stage_label": "Lost/Cancelled",
+        "stage_order": "8",
+        "probability": "0",
+        "required_properties": "closed_lost_reason",
+        "stage_type": "closed_lost"
+      },
+      {
+        "pipeline_name": "listing_pipeline",
+        "pipeline_label": "Listing Pipeline",
+        "stage_name": "listing_consultation",
+        "stage_label": "Listing Consultation",
+        "stage_order": "1",
+        "probability": "20",
+        "required_properties": "property_address,property_type",
+        "stage_type": "open"
+      },
+      {
+        "pipeline_name": "listing_pipeline",
+        "pipeline_label": "Listing Pipeline",
+        "stage_name": "pricing_analysis",
+        "stage_label": "Pricing Analysis",
+        "stage_order": "2",
+        "probability": "40",
+        "required_properties": "square_footage,bedrooms,bathrooms",
+        "stage_type": "open"
+      },
+      {
+        "pipeline_name": "listing_pipeline",
+        "pipeline_label": "Listing Pipeline",
+        "stage_name": "listing_agreement",
+        "stage_label": "Listing Agreement",
+        "stage_order": "3",
+        "probability": "60",
+        "required_properties": "listing_price,commission_rate",
+        "stage_type": "open"
+      },
+      {
+        "pipeline_name": "listing_pipeline",
+        "pipeline_label": "Listing Pipeline",
+        "stage_name": "active_listing",
+        "stage_label": "Active Listing",
+        "stage_order": "4",
+        "probability": "70",
+        "required_properties": "",
+        "stage_type": "open"
+      },
+      {
+        "pipeline_name": "listing_pipeline",
+        "pipeline_label": "Listing Pipeline",
+        "stage_name": "offer_received",
+        "stage_label": "Offer Received",
+        "stage_order": "5",
+        "probability": "85",
+        "required_properties": "",
+        "stage_type": "open"
+      },
+      {
+        "pipeline_name": "listing_pipeline",
+        "pipeline_label": "Listing Pipeline",
+        "stage_name": "under_contract",
+        "stage_label": "Under Contract",
+        "stage_order": "6",
+        "probability": "95",
+        "required_properties": "final_sale_price",
+        "stage_type": "open"
+      },
+      {
+        "pipeline_name": "listing_pipeline",
+        "pipeline_label": "Listing Pipeline",
+        "stage_name": "closed_won",
+        "stage_label": "Closed/Sold",
+        "stage_order": "7",
+        "probability": "100",
+        "required_properties": "closedate",
+        "stage_type": "closed_won"
+      },
+      {
+        "pipeline_name": "listing_pipeline",
+        "pipeline_label": "Listing Pipeline",
+        "stage_name": "closed_lost",
+        "stage_label": "Expired/Cancelled",
+        "stage_order": "8",
+        "probability": "0",
+        "required_properties": "closed_lost_reason",
+        "stage_type": "closed_lost"
+      }
+    ],
+    "products": [
+      {
+        "name": "Buyer Representation",
+        "description": "Full buyer representation services",
+        "price": "0.00",
+        "unit_cost": "0.00",
+        "category": "Service",
+        "sku": "BUY-REP-001",
+        "active": "true"
+      },
+      {
+        "name": "Listing Service - Full",
+        "description": "Full listing service with marketing and showings",
+        "price": "0.00",
+        "unit_cost": "0.00",
+        "category": "Service",
+        "sku": "LIST-FULL-001",
+        "active": "true"
+      },
+      {
+        "name": "Market Analysis Report",
+        "description": "Comprehensive market analysis and pricing report",
+        "price": "200.00",
+        "unit_cost": "50.00",
+        "category": "Report",
+        "sku": "MKT-ANLYS-001",
+        "active": "true"
+      },
+      {
+        "name": "Property Photography",
+        "description": "Professional property photography service",
+        "price": "300.00",
+        "unit_cost": "150.00",
+        "category": "Marketing",
+        "sku": "PHOTO-SRV-001",
+        "active": "true"
+      },
+      {
+        "name": "Virtual Tour Creation",
+        "description": "3D virtual tour creation and hosting",
+        "price": "500.00",
+        "unit_cost": "200.00",
+        "category": "Marketing",
+        "sku": "VTOUR-001",
+        "active": "true"
+      }
+    ]
+  }
+}

@@ -1,0 +1,226 @@
+{
+  "name": "Sales CRM Setup",
+  "description": "Complete sales-focused CRM configuration with custom properties, pipelines, and product management",
+  "industry": "sales",
+  "categories": ["custom-properties", "property-groups", "deal-pipelines", "products"],
+  "configurations": {
+    "custom-properties": [
+      {
+        "object_type": "contact",
+        "name": "lead_source_detail",
+        "label": "Lead Source Detail",
+        "type": "enumeration",
+        "field_type": "select",
+        "group_name": "lead_information",
+        "description": "Detailed source where this lead originated",
+        "options": "Website Form,LinkedIn,Cold Email,Referral,Trade Show,Webinar,Content Download,Phone Call",
+        "required": "false"
+      },
+      {
+        "object_type": "contact",
+        "name": "lead_score",
+        "label": "Lead Score",
+        "type": "number",
+        "field_type": "number",
+        "group_name": "lead_information",
+        "description": "Calculated lead score based on engagement",
+        "required": "false"
+      },
+      {
+        "object_type": "contact",
+        "name": "budget_authority",
+        "label": "Budget Authority",
+        "type": "enumeration",
+        "field_type": "select",
+        "group_name": "qualification_data",
+        "description": "Contact's authority to make budget decisions",
+        "options": "Decision Maker,Influencer,Budget Holder,End User,Unknown",
+        "required": "false"
+      },
+      {
+        "object_type": "company",
+        "name": "company_size_range",
+        "label": "Company Size Range",
+        "type": "enumeration",
+        "field_type": "select",
+        "group_name": "company_details",
+        "description": "Employee count range",
+        "options": "1-10,11-50,51-200,201-1000,1000+",
+        "required": "false"
+      },
+      {
+        "object_type": "company",
+        "name": "annual_revenue_range",
+        "label": "Annual Revenue Range",
+        "type": "enumeration",
+        "field_type": "select",
+        "group_name": "company_details",
+        "description": "Estimated annual revenue range",
+        "options": "Under $1M,$1M-$10M,$10M-$50M,$50M-$100M,$100M+",
+        "required": "false"
+      },
+      {
+        "object_type": "deal",
+        "name": "deal_source",
+        "label": "Deal Source",
+        "type": "enumeration",
+        "field_type": "select",
+        "group_name": "deal_tracking",
+        "description": "How this deal was generated",
+        "options": "Inbound Lead,Outbound Prospecting,Referral,Existing Customer,Partner",
+        "required": "true"
+      },
+      {
+        "object_type": "deal",
+        "name": "competitor_analysis",
+        "label": "Competitor Analysis",
+        "type": "string",
+        "field_type": "textarea",
+        "group_name": "deal_tracking",
+        "description": "Analysis of competing solutions being considered",
+        "required": "false"
+      },
+      {
+        "object_type": "deal",
+        "name": "decision_timeline",
+        "label": "Decision Timeline",
+        "type": "enumeration",
+        "field_type": "select",
+        "group_name": "deal_tracking",
+        "description": "Expected timeline for decision",
+        "options": "Immediate,30 days,60 days,90 days,Next Quarter,Unknown",
+        "required": "false"
+      }
+    ],
+    "property-groups": [
+      {
+        "object_type": "contact",
+        "name": "lead_information",
+        "display_name": "Lead Information",
+        "display_order": "1",
+        "description": "Properties related to lead generation and source tracking"
+      },
+      {
+        "object_type": "contact",
+        "name": "qualification_data",
+        "display_name": "Qualification Data",
+        "display_order": "2",
+        "description": "Lead scoring and qualification information"
+      },
+      {
+        "object_type": "company",
+        "name": "company_details",
+        "display_name": "Company Details",
+        "display_order": "1",
+        "description": "Extended company information and classification"
+      },
+      {
+        "object_type": "deal",
+        "name": "deal_tracking",
+        "display_name": "Deal Tracking",
+        "display_order": "1",
+        "description": "Custom deal tracking and pipeline information"
+      }
+    ],
+    "deal-pipelines": [
+      {
+        "pipeline_name": "sales_pipeline",
+        "pipeline_label": "Sales Pipeline",
+        "stage_name": "lead_qualification",
+        "stage_label": "Lead Qualification",
+        "stage_order": "1",
+        "probability": "10",
+        "required_properties": "deal_source,lead_score",
+        "stage_type": "open"
+      },
+      {
+        "pipeline_name": "sales_pipeline",
+        "pipeline_label": "Sales Pipeline",
+        "stage_name": "needs_analysis",
+        "stage_label": "Needs Analysis",
+        "stage_order": "2",
+        "probability": "25",
+        "required_properties": "budget_authority,decision_timeline",
+        "stage_type": "open"
+      },
+      {
+        "pipeline_name": "sales_pipeline",
+        "pipeline_label": "Sales Pipeline",
+        "stage_name": "proposal_development",
+        "stage_label": "Proposal Development",
+        "stage_order": "3",
+        "probability": "50",
+        "required_properties": "competitor_analysis",
+        "stage_type": "open"
+      },
+      {
+        "pipeline_name": "sales_pipeline",
+        "pipeline_label": "Sales Pipeline",
+        "stage_name": "negotiation",
+        "stage_label": "Negotiation",
+        "stage_order": "4",
+        "probability": "75",
+        "required_properties": "",
+        "stage_type": "open"
+      },
+      {
+        "pipeline_name": "sales_pipeline",
+        "pipeline_label": "Sales Pipeline",
+        "stage_name": "closed_won",
+        "stage_label": "Closed Won",
+        "stage_order": "5",
+        "probability": "100",
+        "required_properties": "closedate",
+        "stage_type": "closed_won"
+      },
+      {
+        "pipeline_name": "sales_pipeline",
+        "pipeline_label": "Sales Pipeline",
+        "stage_name": "closed_lost",
+        "stage_label": "Closed Lost",
+        "stage_order": "6",
+        "probability": "0",
+        "required_properties": "closed_lost_reason",
+        "stage_type": "closed_lost"
+      }
+    ],
+    "products": [
+      {
+        "name": "CRM Professional",
+        "description": "Professional CRM solution with advanced features",
+        "price": "99.00",
+        "unit_cost": "35.00",
+        "category": "Software",
+        "sku": "CRM-PRO-001",
+        "active": "true"
+      },
+      {
+        "name": "CRM Enterprise",
+        "description": "Enterprise CRM solution with custom integrations",
+        "price": "299.00",
+        "unit_cost": "125.00",
+        "category": "Software",
+        "sku": "CRM-ENT-001",
+        "active": "true"
+      },
+      {
+        "name": "Implementation Service",
+        "description": "Professional implementation and setup service",
+        "price": "2500.00",
+        "unit_cost": "1200.00",
+        "category": "Service",
+        "sku": "IMPL-SRV-001",
+        "active": "true"
+      },
+      {
+        "name": "Training Package",
+        "description": "Comprehensive user training program",
+        "price": "1500.00",
+        "unit_cost": "400.00",
+        "category": "Service",
+        "sku": "TRAIN-PKG-001",
+        "active": "true"
+      }
+    ]
+  }
+}
