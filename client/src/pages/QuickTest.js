@@ -22,7 +22,7 @@ const OBJECT_TYPES = [
 ];
 
 function QuickTest() {
-  const { setError, setSuccess } = useApp();
+  const { setError, showSuccess } = useApp();
   const [fields, setFields] = useState([
     {
       id: 1,
@@ -37,7 +37,7 @@ function QuickTest() {
 
   const deployMutation = useMutation(deploymentAPI.create, {
     onSuccess: (response) => {
-      setSuccess(`Deployment started successfully! ID: ${response.data.deploymentId}`);
+      showSuccess(`Deployment started successfully! ID: ${response.data.deploymentId}`);
     },
     onError: (error) => {
       setError(`Deployment failed: ${error.message}`);
