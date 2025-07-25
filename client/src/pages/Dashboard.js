@@ -55,8 +55,8 @@ function Dashboard() {
       bgColor: 'bg-blue-100',
     },
     {
-      name: 'Import Data',
-      description: 'Upload CSV or paste Excel data to analyze',
+      name: 'Import Configuration',
+      description: 'Upload configuration files to set up HubSpot properties',
       href: '/import',
       icon: CloudArrowUpIcon,
       iconColor: 'text-green-600',
@@ -94,9 +94,9 @@ function Dashboard() {
                   This platform helps you quickly set up HubSpot accounts for clients by:
                 </p>
                 <ul className="space-y-1 text-sm">
-                  <li>• <strong>Importing data from CSV files</strong> - Upload contact lists, company data, etc.</li>
-                  <li>• <strong>Creating custom properties</strong> - Automatically map your fields to HubSpot</li>
-                  <li>• <strong>Setting up pipelines</strong> - Configure sales processes for different industries</li>
+                  <li>• <strong>Importing configuration from CSV files</strong> - Upload property definitions, pipeline setups, etc.</li>
+                  <li>• <strong>Creating custom properties</strong> - Automatically set up fields and groups in HubSpot</li>
+                  <li>• <strong>Setting up pipelines</strong> - Configure sales and ticket processes for different industries</li>
                   <li>• <strong>Using templates</strong> - Pre-built configurations for common business types</li>
                 </ul>
                 <p className="mt-3 text-sm font-medium">
@@ -113,8 +113,8 @@ function Dashboard() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
                   <Link to="/import" className="text-sm bg-white border border-gray-200 rounded-lg p-3 hover:bg-gray-50 block">
                     <CloudArrowUpIcon className="h-5 w-5 mb-2 text-blue-600" />
-                    <div className="font-medium">Import Data</div>
-                    <div className="text-gray-600 text-xs">Upload CSV and create properties</div>
+                    <div className="font-medium">Import Configuration</div>
+                    <div className="text-gray-600 text-xs">Upload configuration CSV files</div>
                   </Link>
                   <Link to="/templates" className="text-sm bg-white border border-gray-200 rounded-lg p-3 hover:bg-gray-50 block">
                     <DocumentDuplicateIcon className="h-5 w-5 mb-2 text-green-600" />

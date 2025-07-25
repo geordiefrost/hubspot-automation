@@ -8,10 +8,10 @@ import ImportStep3 from '../components/Import/ImportStep3';
 import ImportStep4 from '../components/Import/ImportStep4';
 
 const STEPS = [
-  { id: 1, name: 'Import Data', icon: CloudArrowUpIcon },
-  { id: 2, name: 'Analyze Fields', icon: DocumentTextIcon },
-  { id: 3, name: 'Review Mappings', icon: TableCellsIcon },
-  { id: 4, name: 'Deploy or Save', icon: ArrowRightIcon },
+  { id: 1, name: 'Upload Configuration', icon: CloudArrowUpIcon },
+  { id: 2, name: 'Analyze Configuration', icon: DocumentTextIcon },
+  { id: 3, name: 'Review Setup', icon: TableCellsIcon },
+  { id: 4, name: 'Deploy Configuration', icon: ArrowRightIcon },
 ];
 
 function Import() {
@@ -20,7 +20,7 @@ function Import() {
     headers: [],
     sampleData: [],
     totalRows: 0,
-    objectType: 'contact',
+    configType: 'custom-properties',
     mappings: [],
     configuration: null,
   });
@@ -31,7 +31,7 @@ function Import() {
       headers: [],
       sampleData: [],
       totalRows: 0,
-      objectType: 'contact',
+      configType: 'custom-properties',
       mappings: [],
       configuration: null,
     });
@@ -53,8 +53,8 @@ function Import() {
   return (
     <div className="min-h-full">
       <PageHeader
-        title="Import Data"
-        subtitle="Import CSV or Excel data and create HubSpot properties"
+        title="Import Configuration"
+        subtitle="Upload HubSpot configuration files to set up custom fields, pipelines, and properties"
       >
         {currentStep > 1 && (
           <button
@@ -70,28 +70,33 @@ function Import() {
         {/* Import Process Overview */}
         {currentStep === 1 && (
           <div className="mb-8">
-            <HelpCard type="info" title="How the Import Process Works">
+            <HelpCard type="info" title="How Configuration Import Works">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-3">
                 <div className="text-center">
                   <CloudArrowUpIcon className="h-8 w-8 mx-auto mb-2 text-blue-600" />
-                  <div className="text-sm font-medium">1. Upload Data</div>
-                  <div className="text-xs text-gray-600">CSV or paste Excel data</div>
+                  <div className="text-sm font-medium">1. Upload Configuration</div>
+                  <div className="text-xs text-gray-600">CSV files with HubSpot setup data</div>
                 </div>
                 <div className="text-center">
                   <DocumentTextIcon className="h-8 w-8 mx-auto mb-2 text-green-600" />
-                  <div className="text-sm font-medium">2. Analyze Fields</div>
-                  <div className="text-xs text-gray-600">AI detects property types</div>
+                  <div className="text-sm font-medium">2. Analyze Configuration</div>
+                  <div className="text-xs text-gray-600">Validate properties and settings</div>
                 </div>
                 <div className="text-center">
                   <TableCellsIcon className="h-8 w-8 mx-auto mb-2 text-purple-600" />
-                  <div className="text-sm font-medium">3. Review Mapping</div>
-                  <div className="text-xs text-gray-600">Adjust field mappings</div>
+                  <div className="text-sm font-medium">3. Review Setup</div>
+                  <div className="text-xs text-gray-600">Preview HubSpot changes</div>
                 </div>
                 <div className="text-center">
                   <ArrowRightIcon className="h-8 w-8 mx-auto mb-2 text-orange-600" />
                   <div className="text-sm font-medium">4. Deploy</div>
-                  <div className="text-xs text-gray-600">Create in HubSpot</div>
+                  <div className="text-xs text-gray-600">Create configuration in HubSpot</div>
                 </div>
+              </div>
+              <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+                <p className="text-sm text-blue-800">
+                  <strong>What you can import:</strong> Custom properties, property groups, deal pipelines, ticket pipelines, and product configurations. This does NOT import contact, company, or deal data.
+                </p>
               </div>
             </HelpCard>
           </div>

@@ -13,15 +13,17 @@ import LoadingSpinner from '../Common/LoadingSpinner';
 import HelpCard from '../Common/HelpCard';
 import { InfoTooltip } from '../Common/Tooltip';
 
-const OBJECT_TYPES = [
-  { value: 'contact', label: 'Contacts', description: 'People in your CRM' },
-  { value: 'company', label: 'Companies', description: 'Organizations and businesses' },
-  { value: 'deal', label: 'Deals', description: 'Sales opportunities' },
+const CONFIG_TYPES = [
+  { value: 'custom-properties', label: 'Custom Properties', description: 'Create custom fields for HubSpot objects' },
+  { value: 'property-groups', label: 'Property Groups', description: 'Organize properties into logical groups' },
+  { value: 'deal-pipelines', label: 'Deal Pipelines', description: 'Configure sales process stages' },
+  { value: 'ticket-pipelines', label: 'Ticket Pipelines', description: 'Set up customer support workflows' },
+  { value: 'products', label: 'Products', description: 'Configure product catalog' },
 ];
 
 function ImportStep1({ onComplete, data }) {
   const { setError } = useApp();
-  const [objectType, setObjectType] = useState(data.objectType || 'contact');
+  const [configType, setConfigType] = useState(data.configType || 'custom-properties');
   const [importMethod, setImportMethod] = useState('upload'); // 'upload' or 'paste'
   const [csvData, setCsvData] = useState('');
   const [pasteData, setPasteData] = useState('');
@@ -31,7 +33,7 @@ function ImportStep1({ onComplete, data }) {
     onSuccess: (response) => {
       onComplete({
         ...response.data,
-        objectType,
+        configType,
         importMethod: 'csv'
       });
     },
@@ -45,7 +47,7 @@ function ImportStep1({ onComplete, data }) {
     onSuccess: (response) => {
       onComplete({
         ...response.data,
-        objectType,
+        configType,
         importMethod: 'paste'
       });
     },
@@ -84,7 +86,7 @@ function ImportStep1({ onComplete, data }) {
 
     csvMutation.mutate({
       csvData,
-      objectType,
+      configType,
       delimiter: detectDelimiter(csvData)
     });
   };
@@ -97,7 +99,7 @@ function ImportStep1({ onComplete, data }) {
 
     pasteMutation.mutate({
       pastedData: pasteData,
-      objectType
+      configType
     });
   };
 
@@ -112,39 +114,84 @@ function ImportStep1({ onComplete, data }) {
     return ',';
   };
 
+  // Template download functionality
+  const handleDownloadTemplate = async (templateType) => {
+    try {
+      const response = await importAPI.downloadTemplate(templateType);
+      
+      // Create blob and download link
+      const blob = new Blob([response.data], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${templateType}-template.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      setError(`Failed to download template: ${error.message}`);
+    }
+  };
+
   const isLoading = csvMutation.isLoading || pasteMutation.isLoading;
 
   return (
     <div className="p-6">
       <div className="mb-6">
         <h3 className="text-lg font-medium text-gray-900 mb-2">
-          Import Your Data
+          Import Configuration
         </h3>
         <p className="text-sm text-gray-600">
-          Upload a CSV file or paste data from Excel to get started. We'll analyze your data and suggest the best HubSpot property mappings.
+          Upload CSV files with HubSpot configuration data to set up custom properties, pipelines, and more. Download example templates below to get started.
         </p>
+      </div>
+
+      {/* Download Templates Section */}
+      <div className="mb-6">
+        <HelpCard type="tip" title="Download CSV Templates">
+          <p className="text-sm mb-4">
+            Download example CSV templates to see the correct format for each configuration type:
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {CONFIG_TYPES.map((config) => (
+              <button
+                key={config.value}
+                onClick={() => handleDownloadTemplate(config.value)}
+                className="text-left p-3 border border-gray-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 transition-colors"
+              >
+                <div className="text-sm font-medium text-gray-900">{config.label}</div>
+                <div className="text-xs text-gray-600 mt-1">{config.description}</div>
+                <div className="text-xs text-primary-600 mt-2 font-medium">Download Template</div>
+              </button>
+            ))}
+          </div>
+        </HelpCard>
       </div>
 
       {/* Step 1 Help Card */}
       <div className="mb-6">
-        <HelpCard type="info" title="Step 1: Choose Your Data">
+        <HelpCard type="info" title="Step 1: Choose Configuration Type">
           <div className="space-y-3">
-            <p>Select what type of HubSpot records you're importing, then choose how to provide your data:</p>
+            <p>Select what type of HubSpot configuration you're importing, then upload your CSV file:</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
               <div>
-                <strong>CSV Upload:</strong>
+                <strong>Configuration Types:</strong>
                 <ul className="mt-1 space-y-1 text-xs">
-                  <li>• Best for large datasets (1000+ records)</li>
-                  <li>• Supports .csv, .xls, .xlsx files</li>
-                  <li>• Handles special characters properly</li>
+                  <li>• Custom Properties - Create custom fields</li>
+                  <li>• Property Groups - Organize field sections</li>
+                  <li>• Deal Pipelines - Sales process stages</li>
+                  <li>• Ticket Pipelines - Support workflows</li>
+                  <li>• Products - Product catalog setup</li>
                 </ul>
               </div>
               <div>
-                <strong>Excel Paste:</strong>
+                <strong>Upload Options:</strong>
                 <ul className="mt-1 space-y-1 text-xs">
-                  <li>• Quick for small datasets (&lt;500 records)</li>
-                  <li>• Copy directly from Excel/Google Sheets</li>
-                  <li>• Perfect for testing with sample data</li>
+                  <li>• CSV files with headers required</li>
+                  <li>• Download templates for correct format</li>
+                  <li>• Supports .csv, .xls, .xlsx files</li>
+                  <li>• Can paste data from Excel/Sheets</li>
                 </ul>
               </div>
             </div>
@@ -152,31 +199,31 @@ function ImportStep1({ onComplete, data }) {
         </HelpCard>
       </div>
 
-      {/* Object Type Selection */}
+      {/* Configuration Type Selection */}
       <div className="mb-6">
         <label className="block text-sm font-medium text-gray-700 mb-3 flex items-center">
-          What type of data are you importing?
+          What type of configuration are you importing?
           <InfoTooltip 
-            content="Choose the HubSpot object type that matches your data. This determines which properties will be available for mapping." 
+            content="Choose the configuration type that matches your CSV file. Download templates above to see the required format." 
             className="ml-2"
           />
         </label>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-          {OBJECT_TYPES.map((type) => (
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {CONFIG_TYPES.map((type) => (
             <label
               key={type.value}
               className={`relative flex cursor-pointer rounded-lg border p-4 focus:outline-none ${
-                objectType === type.value
+                configType === type.value
                   ? 'border-primary-500 ring-2 ring-primary-500'
                   : 'border-gray-300'
               }`}
             >
               <input
                 type="radio"
-                name="objectType"
+                name="configType"
                 value={type.value}
-                checked={objectType === type.value}
-                onChange={(e) => setObjectType(e.target.value)}
+                checked={configType === type.value}
+                onChange={(e) => setConfigType(e.target.value)}
                 className="sr-only"
               />
               <div className="flex flex-1">
@@ -207,7 +254,7 @@ function ImportStep1({ onComplete, data }) {
             }`}
           >
             <CloudArrowUpIcon className="h-5 w-5 mr-2" />
-            Upload CSV File
+            Upload Configuration CSV
           </button>
           <button
             type="button"
@@ -219,7 +266,7 @@ function ImportStep1({ onComplete, data }) {
             }`}
           >
             <TableCellsIcon className="h-5 w-5 mr-2" />
-            Paste Excel Data
+            Paste Configuration Data
           </button>
         </div>
 
@@ -241,10 +288,10 @@ function ImportStep1({ onComplete, data }) {
               <div className="mt-2">
                 <p className="text-sm text-gray-600">
                   {isDragActive
-                    ? 'Drop the CSV file here...'
+                    ? 'Drop the configuration file here...'
                     : isDragReject
                     ? 'Please drop a valid CSV file'
-                    : 'Drag and drop a CSV file here, or click to select'}
+                    : 'Drag and drop a configuration CSV file here, or click to select'}
                 </p>
                 <p className="text-xs text-gray-500 mt-1">
                   Supports .csv, .xls, .xlsx files up to 10MB
@@ -257,7 +304,7 @@ function ImportStep1({ onComplete, data }) {
                 <div className="flex items-center">
                   <DocumentTextIcon className="h-5 w-5 text-green-600 mr-2" />
                   <span className="text-sm text-green-800">
-                    CSV file loaded ({Math.round(csvData.length / 1024)}KB)
+                    Configuration file loaded ({Math.round(csvData.length / 1024)}KB)
                   </span>
                 </div>
               </div>
@@ -274,7 +321,7 @@ function ImportStep1({ onComplete, data }) {
                   Parsing CSV...
                 </>
               ) : (
-                'Parse CSV Data'
+                'Parse Configuration Data'
               )}
             </button>
           </div>
@@ -285,17 +332,17 @@ function ImportStep1({ onComplete, data }) {
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Paste your Excel data here
+                Paste your configuration data here
               </label>
               <textarea
                 value={pasteData}
                 onChange={(e) => setPasteData(e.target.value)}
-                placeholder="Copy cells from Excel and paste here..."
+                placeholder="Copy configuration data from Excel/Sheets and paste here..."
                 rows={8}
                 className="input-field resize-none font-mono text-sm"
               />
               <p className="mt-1 text-xs text-gray-500">
-                Copy and paste directly from Excel (Ctrl+C, then Ctrl+V). Include headers in the first row.
+                Copy and paste configuration data from Excel/Google Sheets. Include column headers in the first row.
               </p>
             </div>
 
@@ -324,14 +371,14 @@ function ImportStep1({ onComplete, data }) {
             <ExclamationTriangleIcon className="h-5 w-5 text-blue-400" />
           </div>
           <div className="ml-3">
-            <h4 className="text-sm font-medium text-blue-800">Data Format Tips</h4>
+            <h4 className="text-sm font-medium text-blue-800">Configuration Format Tips</h4>
             <div className="mt-2 text-sm text-blue-700">
               <ul className="list-disc list-inside space-y-1">
-                <li>Include column headers in the first row</li>
-                <li>Use descriptive field names (e.g., "First Name", "Email Address")</li>
-                <li>Include sample data to help with field type detection</li>
-                <li>For dropdown fields, use consistent values</li>
-                <li>Date fields should use standard formats (YYYY-MM-DD)</li>
+                <li>Download templates above to see the required column format</li>
+                <li>Include all required headers in the first row</li>
+                <li>Use exact field names as shown in templates</li>
+                <li>For dropdown options, separate values with commas</li>
+                <li>Boolean fields should use "true" or "false"</li>
               </ul>
             </div>
           </div>

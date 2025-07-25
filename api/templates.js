@@ -46,50 +46,74 @@ module.exports = async function handler(req, res) {
 };
 
 async function handleListTemplates(req, res) {
-  const { limit = 10, offset = 0, industry } = req.query;
-  
-  let query = supabase
-    .from('templates')
-    .select('*')
-    .eq('isActive', true)
-    .order('usageCount', { ascending: false })
-    .limit(parseInt(limit))
-    .range(parseInt(offset), parseInt(offset) + parseInt(limit) - 1);
-  
-  if (industry) {
-    query = query.eq('industry', industry);
+  try {
+    const { limit = 10, offset = 0, industry } = req.query;
+    
+    // Try to fetch from Supabase, but provide fallback
+    let templates = [];
+    
+    try {
+      let query = supabase
+        .from('templates')
+        .select('*')
+        .eq('isActive', true)
+        .order('usageCount', { ascending: false })
+        .limit(parseInt(limit))
+        .range(parseInt(offset), parseInt(offset) + parseInt(limit) - 1);
+      
+      if (industry) {
+        query = query.eq('industry', industry);
+      }
+      
+      const { data, error } = await query;
+      
+      if (!error && data) {
+        templates = data;
+      }
+    } catch (dbError) {
+      console.log('Database not available for templates, using empty list:', dbError.message);
+    }
+    
+    res.status(200).json({
+      success: true,
+      data: templates
+    });
+  } catch (error) {
+    console.error('Templates list error:', error);
+    res.status(500).json({
+      error: 'Failed to load templates',
+      details: error.message
+    });
   }
-  
-  const { data, error } = await query;
-  
-  if (error) throw error;
-  
-  res.status(200).json({
-    success: true,
-    data: data || []
-  });
 }
 
 async function handleGetTemplate(req, res, id) {
-  const { data, error } = await supabase
-    .from('templates')
-    .select('*')
-    .eq('id', id)
-    .single();
-  
-  if (error) {
-    if (error.code === 'PGRST116') {
-      return res.status(404).json({
-        error: { code: '404', message: 'Template not found' }
-      });
+  try {
+    const { data, error } = await supabase
+      .from('templates')
+      .select('*')
+      .eq('id', id)
+      .single();
+    
+    if (error) {
+      if (error.code === 'PGRST116') {
+        return res.status(404).json({
+          error: { code: '404', message: 'Template not found' }
+        });
+      }
+      throw error;
     }
-    throw error;
+    
+    res.status(200).json({
+      success: true,
+      data
+    });
+  } catch (dbError) {
+    console.log('Database not available, template not found:', dbError.message);
+    res.status(404).json({
+      error: { code: '404', message: 'Template not found' }
+    });
   }
-  
-  res.status(200).json({
-    success: true,
-    data
-  });
 }
 
 async function handleCreateTemplate(req, res, { name, description, industry, config }) {
@@ -99,68 +123,89 @@ async function handleCreateTemplate(req, res, { name, description, industry, con
     });
   }
   
-  const { data, error } = await supabase
-    .from('templates')
-    .insert({
-      name,
-      description,
-      industry,
-      config,
-      createdBy: 'api',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    })
-    .select()
-    .single();
-  
-  if (error) throw error;
-  
-  res.status(201).json({
-    success: true,
-    data
-  });
+  try {
+    const { data, error } = await supabase
+      .from('templates')
+      .insert({
+        name,
+        description,
+        industry,
+        config,
+        createdBy: 'api',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      })
+      .select()
+      .single();
+    
+    if (error) throw error;
+    
+    res.status(201).json({
+      success: true,
+      data
+    });
+  } catch (dbError) {
+    console.log('Database not available for template creation:', dbError.message);
+    res.status(503).json({
+      error: 'Database not available. Please try again later.'
+    });
+  }
 }
 
 async function handleUpdateTemplate(req, res, id, { name, description, industry, config }) {
-  const { data, error } = await supabase
-    .from('templates')
-    .update({
-      name,
-      description,
-      industry,
-      config,
-      updatedAt: new Date().toISOString()
-    })
-    .eq('id', id)
-    .select()
-    .single();
-  
-  if (error) throw error;
-  
-  res.status(200).json({
-    success: true,
-    data
-  });
+  try {
+    const { data, error } = await supabase
+      .from('templates')
+      .update({
+        name,
+        description,
+        industry,
+        config,
+        updatedAt: new Date().toISOString()
+      })
+      .eq('id', id)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    
+    res.status(200).json({
+      success: true,
+      data
+    });
+  } catch (dbError) {
+    console.log('Database not available for template update:', dbError.message);
+    res.status(503).json({
+      error: 'Database not available. Please try again later.'
+    });
+  }
 }
 
 async function handleDeleteTemplate(req, res, id) {
-  // Soft delete by setting isActive to false
-  const { data, error } = await supabase
-    .from('templates')
-    .update({ 
-      isActive: false,
-      updatedAt: new Date().toISOString()
-    })
-    .eq('id', id)
-    .select()
-    .single();
-  
-  if (error) throw error;
-  
-  res.status(200).json({
-    success: true,
-    message: 'Template deleted successfully'
-  });
+  try {
+    // Soft delete by setting isActive to false
+    const { data, error } = await supabase
+      .from('templates')
+      .update({ 
+        isActive: false,
+        updatedAt: new Date().toISOString()
+      })
+      .eq('id', id)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    
+    res.status(200).json({
+      success: true,
+      message: 'Template deleted successfully'
+    });
+  } catch (dbError) {
+    console.log('Database not available for template deletion:', dbError.message);
+    res.status(503).json({
+      error: 'Database not available. Please try again later.'
+    });
+  }
 }
 
 async function handleGetIndustryTemplates(req, res) {
